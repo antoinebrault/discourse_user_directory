@@ -1,7 +1,7 @@
 # name: discourse_user_directory
 # about: Discourse user directory
 # version: 0.0.5
-# authors: sbauch, Piotr Szal
+# authors: sbauch
 
 # load the engine definition, which is in a separate file so that script/rails can use it
 require File.expand_path('../lib/discourse_user_directory/engine', __FILE__)
