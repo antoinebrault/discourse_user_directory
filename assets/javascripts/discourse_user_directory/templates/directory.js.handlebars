@@ -1,9 +1,7 @@
 <div class='list-controls'>
   <div class="container">
     <ul class="nav nav-pills" id='category-filter'>
-      {{#each controller.availableNavItems}}
-        {{view Discourse.NavItemView contentBinding="this"}}
-      {{/each}}
+
   </ul>
   
   <section class="category-column first">
@@ -11,27 +9,27 @@
   </section>
 
   <section class="category-column first">
-      {{#each contentOdd}}
+  {{#each contentOdd}}
 
-  <table id='topic-list' style='margin-bottom:12px;'>
-    <tr>
-      <th>
-        <a href="/users/{{unbound username}}">
-          {{avatar this imageSize="small"}} 
-          {{unbound name}}
-        </a>
-      </th>
-    </tr>
-    <tr>
-      <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td>
-   </tr>
-   <tr>
-     <td>
-     </td>
-   </tr>  
- </table>
+    <table id='topic-list' style='margin-bottom:12px;'>
+      <tr>
+        <th>
+          <a href="/users/{{unbound username}}">
+            {{avatar this imageSize="small"}}
+            {{unbound name}}
+          </a>
+        </th>
+      </tr>
+      <tr>
+        <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td>
+      </tr>
+      <tr>
+        <td>
+        </td>
+      </tr>
+    </table>
   {{/each}}
-</section>
+  </section>
 
   <section class="category-column">
     {{#each contentEven}}
