@@ -7,14 +7,17 @@
   $ cd plugins
   $ git clone git://github.com/vaynermedia/discourse_user_directory.git
 
-3) Install Gems
+2) Add 'Directory' as a top nav item
 
-  bundle install
+   site_settings.yml:
+       top_menu:
+         client: true
+         default: 'latest|new|unread|starred|categories|directory'
 
-4) Add 'Directory' as a top nav item
+   lib/discourse.rb
+       def self.top_menu_items
+         @top_menu_items ||= Discourse.filters + [:category, :categories, :top, :directory]
+       end
 
-Add 'directory' to validNavNames  in app/assets/javascripts/discourse/models/nav_item.js
-
-Start your server and head to the Site Settings. Add 'directory' as a top_menu item in the pipe-separated list.
 
 This project rocks and uses MIT-LICENSE.
