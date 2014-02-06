@@ -8,6 +8,10 @@
  **/
 Discourse.Directory = Discourse.Model.extend({
 
+  userStream: function() {
+    return Discourse.UserStream.create({directory: this});
+  }.property(),
+
   // Update our attributes from a JSON result
   updateFromJson: function(json) {
 
@@ -19,9 +23,5 @@ Discourse.Directory = Discourse.Model.extend({
       directory.set(key, json[key]);
     });
 
-  },
-
-  userStream: function() {
-    return Discourse.UserStream.create({directory: this});
-  }.property()
+  }
 });

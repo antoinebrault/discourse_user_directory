@@ -8,7 +8,6 @@ require File.expand_path('../lib/discourse_user_directory/engine', __FILE__)
 
 # register the two main assets (sprockets will take over from here)
 register_asset('javascripts/discourse_user_directory.js', :server_side)
-#register_asset('javascripts/piioo.js', :server_side)
 register_asset('stylesheets/discourse_user_directory.css')
 
 after_initialize do

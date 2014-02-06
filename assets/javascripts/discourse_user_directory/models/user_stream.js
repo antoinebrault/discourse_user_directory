@@ -68,7 +68,7 @@
       //if (userWeWant) { return Ember.RSVP.resolve(); }
 
       // TODO: if we have all the users in the filter, don't go to the server for them.
-      //self.set('loadingFilter', true);
+      self.set('loadingFilter', true);
 
       //opts = _.merge(opts, self.get('streamFilters'));
 
@@ -76,7 +76,7 @@
       return Discourse.UserStream.loadDirectoryView(query, filter, opts).then(function (json) {
         directory.updateFromJson(json);
         self.updateFromJson(json.user_stream);
-        //self.setProperties({ loadingFilter: false, loaded: true });
+        self.setProperties({ loadingFilter: false, loaded: true });
 
         Discourse.URL.set('queryParams', self.get('streamFilters'));
       }).catch(function(result) {
@@ -123,10 +123,6 @@
       }
     },
 
-    foo: function(){
-      return "FooBar";
-    },
-
     /**
      @private
 
@@ -150,7 +146,7 @@
           return existing;
         }
 
-        //user.set('directory', this.get('directory'));
+        user.set('directory', this.get('directory'));
         userIdentityMap.set(user.get('id'), user);
       }
       return user;

@@ -1,73 +1,71 @@
-<div class='list-controls'>
-  <div class="container">
-    <ul class="nav nav-pills" id='category-filter'>
+{{customHTML "top"}}
 
-    </ul>
 
-    <section class="category-column first">
-      {{view Discourse.TextField valueBinding="controller.username"  styleKey='width:300px;' placeholder="Search for a user by name, username, or email..."}}
-    </section>
+  <div class='list-controls'>
+    <div class="container">
+      <ul class="nav nav-pills" id='category-filter'>
 
-    {{#each userStream.users }}
-      Foo
-    {{/each}}
+      </ul>
 
-    {{cloaked-collection cloakView="users" content=userStream.users}}
+      <section class="category-column first">
+        {{view Discourse.TextField valueBinding="controller.username"  styleKey='width:300px;' placeholder="Search for a user by name, username, or email..."}}
+      </section>
 
-    <section class="category-column first">
-    {{#each contentOdd}}
+      <section class="category-column first">
+      {{#each contentOdd}}
+
+        <table id='topic-list' style='margin-bottom:12px;'>
+          <tr>
+            <th>
+              <a href="/users/{{unbound username}}">
+                {{avatar this imageSize="small"}}
+                {{unbound name}}
+              </a>
+            </th>
+          </tr>
+          <tr>
+            <!-- <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td> -->
+			      <td>{{unbound last_seen_at}}</td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+          </tr>
+        </table>
+      {{/each}}
+      </section>
+
+      <section class="category-column">
+      {{#each contentEven}}
 
       <table id='topic-list' style='margin-bottom:12px;'>
         <tr>
           <th>
-            <a href="/users/{{unbound username}}">
+            <a href="/users/{{unbound username_lower}}">
               {{avatar this imageSize="small"}}
               {{unbound name}}
             </a>
           </th>
         </tr>
         <tr>
-			    <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td>
+          <td>{{unbound last_seen_at}}</td>
         </tr>
         <tr>
           <td>
           </td>
         </tr>
       </table>
-    {{/each}}
-    </section>
 
-    <section class="category-column">
-    {{#each contentEven}}
-
-    <table id='topic-list' style='margin-bottom:12px;'>
-      <tr>
-        <th>
-          <a href="/users/{{unbound username_lower}}">
-            {{avatar this imageSize="small"}}
-            {{unbound name}}
-          </a>
-        </th>
-      </tr>
-      <tr>
-		    <td>{{unbound last_seen_at}}</td>
-      </tr>
-      <tr>
-        <td>
-        </td>
-      </tr>
-    </table>
-
-    {{/each}}
-    </section>
+      {{/each}}
+      </section>
 
 
-    <div class='clearfix'></div>
+      <div class='clearfix'></div>
 
-    {{#if content.length}}
+      {{#if content.length}}
 
-    {{else}}
-      <div>We couldn't find any users!</div>
-    {{/if}}
+      {{else}}
+        <div>We couldn't find any users!</div>
+      {{/if}}
+    </div>
   </div>
-</div>
