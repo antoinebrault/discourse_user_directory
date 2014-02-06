@@ -3,10 +3,16 @@
     <ul class="nav nav-pills" id='category-filter'>
 
     </ul>
-  
+
     <section class="category-column first">
       {{view Discourse.TextField valueBinding="controller.username"  styleKey='width:300px;' placeholder="Search for a user by name, username, or email..."}}
     </section>
+
+    {{#each userStream.users }}
+      Foo
+    {{/each}}
+
+    {{cloaked-collection cloakView="users" content=userStream.users}}
 
     <section class="category-column first">
     {{#each contentOdd}}
@@ -44,14 +50,14 @@
         </th>
       </tr>
       <tr>
-		    <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td>
+		    <td>{{unbound last_seen_at}}</td>
       </tr>
       <tr>
         <td>
         </td>
       </tr>
     </table>
- 
+
     {{/each}}
     </section>
 

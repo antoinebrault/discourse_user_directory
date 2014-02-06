@@ -11,7 +11,8 @@ window.Discourse.DirectoryController = Ember.ArrayController.extend(Discourse.Pr
         return this.refreshUsers();
     }).observes('query'),
     refreshUsers: function() {
-        return this.set('content', Discourse.User.findAll(this.get('query'), this.get('username')));
+        //return this.set('content', Discourse.User.findAll(this.get('query'), this.get('username')));
+      return this.set('content', Discourse.UserStream.refresh(this.get('query'), this.get('username')))
     },
     show: function(term) {
         if (this.get('query') === term) {

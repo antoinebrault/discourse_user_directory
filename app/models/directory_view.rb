@@ -1,6 +1,6 @@
 require_dependency 'guardian'
 
-class UserView
+class DirectoryView
   include ActiveModel::Serialization
 
   attr_reader :users, :filtered_users, :guardian, :filtered_ids

@@ -1,7 +1,15 @@
-class UserViewSerializer < ApplicationSerializer
+require_dependency 'user_serializer'
 
-  attributes :users,
-             :filtered_ids
+module UserStreamSerializerMixin
+
+  def self.included(klass)
+    klass.attributes :user_stream
+  end
+
+  def user_stream
+    result = { users: users, stream: object.filtered_user_ids }
+    result
+  end
 
   def users
     return @users if @users.present?

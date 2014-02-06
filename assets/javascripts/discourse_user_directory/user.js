@@ -9,6 +9,6 @@
           });
       });
       return result;
-    }
+    },
   });
 }).call(this);
