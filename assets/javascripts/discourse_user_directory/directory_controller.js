@@ -2,14 +2,14 @@ window.Discourse.DirectoryController = Ember.ArrayController.extend(Discourse.Pr
     username: null,
     query: null,
     selectAll: false,
-    content: null,
+    userStream: null,
     filterMode: 'directory',
 
     refresh: function(){
       var directory = Discourse.Directory.create(),
         userStream = directory.get('userStream');
       userStream.refresh('active', null);
-      this.set('content', userStream.users);
+      this.set('userStream', userStream);
     },
 
     filterUsers: Discourse.debounce(function() {
@@ -36,20 +36,20 @@ window.Discourse.DirectoryController = Ember.ArrayController.extend(Discourse.Pr
     }).property('filterSummary'),
 
     contentEven: (function() {
-        if (this.blank("content")) {
+        if (this.blank("userStream")) {
             return Em.A();
         }
-        return this.get("content").filter(function(item, index) {
+        return this.get("userStream").users.filter(function(item, index) {
             return ((index + 1) % 2) === 0;
         });
-    }).property("content.@each"),
+    }).property("userStream"),
 
     contentOdd: (function() {
-        if (this.blank("content")) {
+        if (this.blank("userStream")) {
             return Em.A();
         }
-        return this.get("content").filter(function(item, index) {
+        return this.get("userStream").users.filter(function(item, index) {
             return ((index + 1) % 2) === 1;
         });
-    }).property("content.@each")
+    }).property("userStream")
 });
