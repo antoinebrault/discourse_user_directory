@@ -21,6 +21,12 @@
 
         <div class='clearfix'></div>
 
+        {{#if userStream.loadingBelow}}
+			    <div class='spinner'>{{i18n loading}}</div>
+        {{/if}}
+
+		    <div id='directory-bottom'></div>
+
       {{else}}
         <div>We couldn't find any users!</div>
       {{/if}}

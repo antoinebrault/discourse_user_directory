@@ -10,7 +10,6 @@
         userIdentityMap: Em.Map.create(),
         summary: false,
         loaded: false,
-        loadingAbove: false,
         loadingBelow: false,
         loadingFilter: false
         //stagingPost: false
@@ -35,9 +34,53 @@
 
      @property loading
      **/
-    loading: Em.computed.or('loadingAbove', 'loadingBelow', 'loadingFilter'),
+    loading: Em.computed.or('loadingBelow', 'loadingFilter'),
 
     notLoading: Em.computed.not('loading'),
+
+    filteredUsersCount: Em.computed.alias('stream.length'),
+
+    /**
+     Have we loaded any users?
+
+     @property hasUsers
+     **/
+    hasUsers: Em.computed.gt('users.length', 0),
+
+    /**
+     Do we have a stream list of user ids?
+
+     @property hasStream
+     **/
+    hasStream: Em.computed.gt('filteredUsersCount', 0),
+
+    /**
+     Can we append more users to our current stream?
+
+     @property canAppendMore
+     **/
+    canAppendMore: Em.computed.and('notLoading', 'hasUsers', 'lastUserNotLoaded'),
+
+    /**
+     Returns the id of the last user in the set
+
+     @property lastUserId
+     **/
+    lastUserId: function() {
+      return _.last(this.get('stream'));
+    }.property('stream.@each'),
+
+    /**
+     Have we loaded the last user in the stream?
+
+     @property loadedAllUsers
+     **/
+    loadedAllUsers: function() {
+      if (!this.get('hasLoadedData')) { return false; }
+      return !!this.get('users').findProperty('id', this.get('lastUserId'));
+    }.property('hasLoadedData', 'users.@each.id', 'lastUserId'),
+
+    lastUserNotLoaded: Em.computed.not('loadedAllUsers'),
 
     /**
      Loads a new set of users into the stream. If you provide a `nearUser` option and the user
@@ -78,6 +121,8 @@
         self.errorLoading(result);
       });
     },
+
+    hasLoadedData: Em.computed.and('hasUsers', 'hasStream'),
 
     /**
      Appends a single user into the stream.
@@ -148,6 +193,26 @@
     },
 
     /**
+     Returns the window of users below the current set in the stream, bound by the bottom of the
+     stream. This is the collection we use when scrolling downwards.
+
+     @property nextWindow
+     **/
+    nextWindow: function() {
+      // If we can't find the last user loaded, bail
+      var lastLoadedUser = this.get('lastLoadedUser');
+      if (!lastLoadedUser) { return []; }
+
+      // Find the index of the last user loaded, if not found, bail
+      var stream = this.get('stream');
+      var lastIndex = this.indexOf(lastLoadedUser);
+      if (lastIndex === -1) { return []; }
+
+      // find our window of users
+      return stream.slice(lastIndex+1, lastIndex+Discourse.SiteSettings.posts_per_page+1);
+    }.property('lastLoadedUser', 'stream.@each'),
+
+    /**
      @private
 
      Handles an error loading a directory based on a HTTP status code. Updates
@@ -181,6 +246,126 @@
       // Otherwise supply a generic error message
       directory.set('errorTitle', I18n.t('topic.server_error.title'));
       directory.set('message', I18n.t('topic.server_error.description'));
+    },
+
+    /**
+     The last user we have loaded. Useful for checking to see if we should load more
+
+     @property lastLoadedUser
+     **/
+    lastLoadedUser: function() {
+      return _.last(this.get('users'));
+    }.property('users.@each'),
+
+    /**
+     Appends the next window of users to the stream. Call it when scrolling downwards.
+
+     @method appendMore
+     @returns {Ember.Deferred} a promise that's resolved when the users have been added.
+     **/
+    appendMore: function() {
+      var self = this;
+
+      // Make sure we can append more users
+      if (!self.get('canAppendMore')) { return Ember.RSVP.resolve(); }
+
+      var userIds = self.get('nextWindow');
+      if (Ember.isEmpty(userIds)) { return Ember.RSVP.resolve(); }
+
+      self.set('loadingBelow', true);
+
+      var stopLoading = function() {
+        self.set('loadingBelow', false);
+      };
+
+      return self.findUsersByIds(userIds).then(function(users) {
+        users.forEach(function(u) {
+          self.appendUser(u);
+        });
+        stopLoading();
+      }, stopLoading);
+    },
+
+    /**
+     @private
+
+     Returns the index of a particular user in the stream
+
+     @method indexOf
+     @param {Discourse.User} user The user we're looking for
+     **/
+    indexOf: function(user) {
+      return this.get('stream').indexOf(user.get('id'));
+    },
+
+    /**
+     @private
+
+     Returns a list of users in order requested, by id.
+
+     @method findUsersByIds
+     @param {Array} userIds The user Ids we want to retrieve, in order.
+     @returns {Ember.Deferred} a promise that will resolve to the users in the order requested.
+     **/
+    findUsersByIds: function(userIds) {
+      var unloaded = this.listUnloadedIds(userIds),
+        userIdentityMap = this.get('userIdentityMap');
+
+      // Load our unloaded users by id
+      return this.loadIntoIdentityMap(unloaded).then(function() {
+        return userIds.map(function (u) {
+          return userIdentityMap.get(u);
+        });
+      });
+    },
+
+    /**
+     @private
+
+     Given a list of userIds, returns a list of the users we don't have in our
+     identity map and need to load.
+
+     @method listUnloadedIds
+     @param {Array} userIds The user Ids we want to load from the server
+     @returns {Array} the array of userIds we don't have loaded.
+     **/
+    listUnloadedIds: function(userIds) {
+      var unloaded = Em.A(),
+        userIdentityMap = this.get('userIdentityMap');
+      userIds.forEach(function(u) {
+        if (!userIdentityMap.has(u)) { unloaded.pushObject(u); }
+      });
+      return unloaded;
+    },
+
+    /**
+     @private
+
+     Loads a list of users from the server and inserts them into our identity map.
+
+     @method loadIntoIdentityMap
+     @param {Array} userIds The user Ids we want to insert into the identity map.
+     @returns {Ember.Deferred} a promise that will resolve to the users in the order requested.
+     **/
+    loadIntoIdentityMap: function(userIds) {
+
+      // If we don't want any users, return a promise that resolves right away
+      if (Em.isEmpty(userIds)) {
+        return Ember.Deferred.promise(function (p) { p.resolve(); });
+      }
+
+      var url = "/directory/users.json",
+        data = { user_ids: userIds },
+        userStream = this;
+
+      return Discourse.ajax(url, {data: data}).then(function(result) {
+        var users = Em.get(result, "user_stream.users");
+        if (users) {
+          users.forEach(function (u) {
+            userStream.storePost(Discourse.User.create(u));
+          });
+        }
+      });
     }
 
   });

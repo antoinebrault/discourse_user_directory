@@ -36,21 +36,22 @@ window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discour
         });
     }).property('filterSummary'),
 
-    contentEven: (function() {
-        if (this.blank("userStream")) {
-            return Em.A();
-        }
-        return this.get("userStream").users.filter(function(item, index) {
-            return ((index + 1) % 2) === 0;
-        });
-    }).property("userStream"),
+  /**
+   Called the the bottommost visible post on the page changes.
 
-    contentOdd: (function() {
-        if (this.blank("userStream")) {
-            return Em.A();
-        }
-        return this.get("userStream").users.filter(function(item, index) {
-            return ((index + 1) % 2) === 1;
-        });
-    }).property("userStream")
+   @method bottomVisibleChanged
+   @params {Discourse.Post} post that is at the bottom
+   **/
+  bottomVisibleChanged: function(user) {
+    var userStream = this.get('userStream');
+    var lastLoadedUser = userStream.get('lastLoadedUser');
+
+    if (lastLoadedUser && lastLoadedUser === user) {
+      userStream.appendMore();
+    }
+  },
+
+  loadingHTML: function() {
+    return "<div class='spinner'>" + I18n.t('loading') + "</div>";
+  }.property()
 });

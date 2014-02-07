@@ -20,4 +20,12 @@ class DirectoriesController < ApplicationController
       end
     end
   end
+
+  def users
+    params.require(:user_ids)
+    @directory_view = DirectoryView.new(current_user, user_ids: params[:user_ids])
+    directory_view_serializer = DirectoryViewSerializer.new(@directory_view, scope: guardian, root: false)
+    render_json_dump(directory_view_serializer)
+  end
+
 end
