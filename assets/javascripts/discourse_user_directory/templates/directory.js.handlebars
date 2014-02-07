@@ -12,58 +12,14 @@
         {{view Discourse.TextField valueBinding="controller.username"  styleKey='width:300px;' placeholder="Search for a user by name, username, or email..."}}
       </section>
 
-      <section class="category-column first">
-      {{#each contentOdd}}
+      {{#if userStream.users.length}}
+	      <section class="category-column first">
+          {{#unless userStream.loadingFilter}}
+            {{cloaked-collection cloakView="directory_user" defaultHeight="200" content=userStream.users slackRatio=slackRatio loadingHTML=controller.loadingHTML}}
+          {{/unless}}
+		    </section>
 
-        <table id='topic-list' style='margin-bottom:12px;'>
-          <tr>
-            <th>
-              <a href="/users/{{unbound username}}">
-                {{avatar this imageSize="small"}}
-                {{unbound name}}
-              </a>
-            </th>
-          </tr>
-          <tr>
-            <!-- <td class='main-link'> <a href="mailto:{{unbound email}}">{{unbound email}}</a></td> -->
-			      <td>{{unbound last_seen_at}}</td>
-          </tr>
-          <tr>
-            <td>
-            </td>
-          </tr>
-        </table>
-      {{/each}}
-      </section>
-
-      <section class="category-column">
-      {{#each contentEven}}
-
-      <table id='topic-list' style='margin-bottom:12px;'>
-        <tr>
-          <th>
-            <a href="/users/{{unbound username_lower}}">
-              {{avatar this imageSize="small"}}
-              {{unbound name}}
-            </a>
-          </th>
-        </tr>
-        <tr>
-          <td>{{unbound last_seen_at}}</td>
-        </tr>
-        <tr>
-          <td>
-          </td>
-        </tr>
-      </table>
-
-      {{/each}}
-      </section>
-
-
-      <div class='clearfix'></div>
-
-      {{#if content.length}}
+        <div class='clearfix'></div>
 
       {{else}}
         <div>We couldn't find any users!</div>
