@@ -1,23 +1,24 @@
-window.Discourse.DirectoryController = Ember.ArrayController.extend(Discourse.Presence, {
-    username: null,
+window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discourse.Presence, {
+    searchString: null,
     query: null,
     selectAll: false,
     userStream: null,
     filterMode: 'directory',
 
     refresh: function(){
-      var directory = Discourse.Directory.create(),
+      var directory = this.get('model'),
         userStream = directory.get('userStream');
-      userStream.refresh('active', null);
+
+      userStream.refresh('active', this.get('searchString'));
       this.set('userStream', userStream);
     },
 
     filterUsers: Discourse.debounce(function() {
-        return this.refreshUsers();
-    }, 250).observes('username'),
+        return this.refresh();
+    }, 250).observes('searchString'),
 
     orderChanged: (function() {
-        return this.refreshUsers();
+        return this.refresh();
     }).observes('query'),
 
     availableNavItems: (function() {
