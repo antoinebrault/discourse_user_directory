@@ -18,16 +18,11 @@
       return userStream;
     },
 
-    loadDirectoryView: function(query, filter, args) {
-      var opts = _.merge({}, args),
-        url = Discourse.getURL("/directory/" + filter);
-      //if (opts.nearPost) {
-      //  url += "/" + opts.nearPost;
-      //}
-      //delete opts.nearPost;
+    loadDirectoryView: function(query, filter) {
+      url = Discourse.getURL("/directory");
 
       return PreloadStore.getAndRemove("user_directory", function() {
-        return Discourse.ajax(url + ".json", {data: opts});
+        return Discourse.ajax(url + ".json", {data: { filter: filter }});
       });
     }
 
@@ -150,6 +145,42 @@
         userIdentityMap.set(user.get('id'), user);
       }
       return user;
+    },
+
+    /**
+     @private
+
+     Handles an error loading a directory based on a HTTP status code. Updates
+     the text to the correct values.
+
+     @method errorLoading
+     @param {Integer} status the HTTP status code
+     @param {Discourse.Directory} directory The directory instance we were trying to load
+     **/
+    errorLoading: function(result) {
+      var status = result.status;
+
+      var directory = this.get('directory');
+      directory.set('loadingFilter', false);
+      directory.set('errorLoading', true);
+
+      // If the result was 404 the post is not found
+      if (status === 404) {
+        directory.set('errorTitle', I18n.t('topic.not_found.title'));
+        directory.set('errorBodyHtml', result.responseText);
+        return;
+      }
+
+      // If the result is 403 it means invalid access
+      if (status === 403) {
+        directory.set('errorTitle', I18n.t('topic.invalid_access.title'));
+        directory.set('message', I18n.t('topic.invalid_access.description'));
+        return;
+      }
+
+      // Otherwise supply a generic error message
+      directory.set('errorTitle', I18n.t('topic.server_error.title'));
+      directory.set('message', I18n.t('topic.server_error.description'));
     }
 
   });

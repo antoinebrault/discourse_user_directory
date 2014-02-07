@@ -16,7 +16,7 @@ class DirectoriesController < ApplicationController
       end
 
       format.json do
-        render_serialized(@directory_view, DirectoryViewSerializer)
+        render_json_dump(directory_view_serializer)
       end
     end
   end
