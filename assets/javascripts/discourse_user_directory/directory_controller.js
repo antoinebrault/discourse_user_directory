@@ -37,10 +37,10 @@ window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discour
     }).property('filterSummary'),
 
   /**
-   Called the the bottommost visible post on the page changes.
+   Called the the bottommost visible user on the page changes.
 
    @method bottomVisibleChanged
-   @params {Discourse.Post} post that is at the bottom
+   @params {Discourse.USer} user that is at the bottom
    **/
   bottomVisibleChanged: function(user) {
     var userStream = this.get('userStream');
