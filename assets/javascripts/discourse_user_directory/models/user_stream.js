@@ -113,7 +113,6 @@
         directory.updateFromJson(json);
         self.updateFromJson(json.user_stream);
         self.setProperties({ loadingFilter: false, loaded: true });
-
         Discourse.URL.set('queryParams', self.get('streamFilters'));
       }).catch(function(result) {
         self.errorLoading(result);
@@ -178,11 +177,11 @@
         var userIdentityMap = this.get('userIdentityMap'),
           existing = userIdentityMap.get(user.get('id'));
 
-        if (existing) {
+        //if (existing) {
           // If the user is in the identity map, update it and return the old reference.
-          existing.updateFromUser(user);
-          return existing;
-        }
+        //  existing.updateFromUser(user);
+        //  return existing;
+        //}
 
         user.set('directory', this.get('directory'));
         userIdentityMap.set(user.get('id'), user);
@@ -275,7 +274,6 @@
       var stopLoading = function() {
         self.set('loadingBelow', false);
       };
-
       return self.findUsersByIds(userIds).then(function(users) {
         users.forEach(function(u) {
           self.appendUser(u);
@@ -360,7 +358,7 @@
         var users = Em.get(result, "user_stream.users");
         if (users) {
           users.forEach(function (u) {
-            userStream.storePost(Discourse.User.create(u));
+            userStream.storeUser(Discourse.User.create(u));
           });
         }
       });
