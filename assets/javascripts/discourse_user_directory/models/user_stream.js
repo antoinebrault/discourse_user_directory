@@ -6,13 +6,11 @@
       userStream.setProperties({
         users: Em.A(),
         stream: Em.A(),
-        //userFilters: Em.Set.create(),
         userIdentityMap: Em.Map.create(),
         summary: false,
         loaded: false,
         loadingBelow: false,
         loadingFilter: false
-        //stagingPost: false
       });
       return userStream;
     },
