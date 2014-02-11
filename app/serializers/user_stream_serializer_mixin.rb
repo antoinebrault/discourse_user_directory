@@ -16,7 +16,7 @@ module UserStreamSerializerMixin
     @users = []
     if object.users
       object.users.each_with_index do |u, idx|
-        us = UserSerializer.new(u, scope: Guardian.new(nil), root: false)
+        us = DirectoryUserSerializer.new(u, scope: Guardian.new(nil), root: false)
 
         @users << us.as_json
       end
