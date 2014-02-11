@@ -9,6 +9,21 @@
           });
       });
       return result;
-    },
+    }
+
+  });
+
+  window.Discourse.User.reopen({
+
+    updateFromUser: function(otherUser){
+      var user = this;
+      Object.keys(otherUser).forEach(function (key) {
+        var value = otherUser[key];
+        if (typeof value !== "function") {
+          user.set(key, value);
+        }
+      });
+    }
+
   });
 }).call(this);

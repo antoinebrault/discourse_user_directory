@@ -177,11 +177,11 @@
         var userIdentityMap = this.get('userIdentityMap'),
           existing = userIdentityMap.get(user.get('id'));
 
-        //if (existing) {
+        if (existing) {
           // If the user is in the identity map, update it and return the old reference.
-        //  existing.updateFromUser(user);
-        //  return existing;
-        //}
+          existing.updateFromUser(user);
+          return existing;
+        }
 
         user.set('directory', this.get('directory'));
         userIdentityMap.set(user.get('id'), user);
