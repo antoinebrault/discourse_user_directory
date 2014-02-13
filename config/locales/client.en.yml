@@ -1,0 +1,5 @@
+en:
+  filters:
+    directory:
+      title: 'Directory'
+      help: 'Find Users

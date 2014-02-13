@@ -1,0 +1,6 @@
+de:
+  js:
+    filters:
+      directory:
+        title: "Benutzer"
+        help: "Suche Benutzer"
