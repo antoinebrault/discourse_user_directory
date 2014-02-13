@@ -32,11 +32,10 @@ class DirectoryView
 
   def filter_users_by_search_string(filter = nil)
     return if filter.blank?
-    @filtered_users = @filtered_users.where('username_lower like :filter or name like :filter', filter: "%#{filter}%")
+    @filtered_users = @filtered_users.where('lower(username_lower) like :filter or lower(name) like :filter', filter: "%#{filter.downcase}%")
   end
 
   def filter_users_by_ids(user_ids)
-    # TODO: Sort might be off
     @users = @filtered_users.where(id: user_ids)
   end
 
