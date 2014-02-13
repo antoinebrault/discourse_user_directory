@@ -1,0 +1,6 @@
+basic:
+  users_per_page:
+    client: true
+    default: 20
+  users_show_limit:
+    default: 1000

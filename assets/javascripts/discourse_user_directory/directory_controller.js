@@ -1,40 +1,21 @@
 window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discourse.Presence, {
-    searchString: null,
-    query: null,
-    selectAll: false,
-    userStream: null,
-    filterMode: 'directory',
+  searchString: null,
+  query: null,
+  selectAll: false,
+  userStream: null,
+  filterMode: 'directory',
 
-    refresh: function(){
-      var directory = this.get('model'),
-        userStream = directory.get('userStream');
+  refresh: function(){
+    var directory = this.get('model'),
+      userStream = directory.get('userStream');
 
-      userStream.refresh('active', this.get('searchString'));
-      this.set('userStream', userStream);
-    },
+    userStream.refresh('active', this.get('searchString'));
+    this.set('userStream', userStream);
+  },
 
-    filterUsers: Discourse.debounce(function() {
-        return this.refresh();
-    }, 250).observes('searchString'),
-
-    orderChanged: (function() {
-        return this.refresh();
-    }).observes('query'),
-
-    availableNavItems: (function() {
-        var loggedOn, summary;
-        summary = this.get('filterSummary');
-        loggedOn = !!Discourse.get('currentUser');
-        return Discourse.SiteSettings.top_menu.split("|").map(function(i) {
-            return Discourse.NavItem.fromText(i, {
-                loggedOn: loggedOn,
-                hasCategories: true,
-                countSummary: summary
-            });
-        }).filter(function(i) {
-            return i !== null;
-        });
-    }).property('filterSummary'),
+  filterUsers: Discourse.debounce(function() {
+    return this.refresh();
+  }, 250).observes('searchString'),
 
   /**
    Called the the bottommost visible user on the page changes.

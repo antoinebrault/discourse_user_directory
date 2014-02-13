@@ -10,7 +10,7 @@ class DirectoryView
 
     @page = @page.to_i
     @page = 1 if @page.zero?
-    @limit ||= SiteSetting.posts_per_page
+    @limit ||= SiteSetting.users_per_page
 
     setup_filtered_users
 
@@ -48,12 +48,12 @@ class DirectoryView
     # TODO: Sort might be off
     @users = User.where(id: user_ids)
                  .order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username")
-                 .limit(1000)
+                 .limit(SiteSetting.users_show_limit)
     @users
   end
 
   def filter_user_ids_by(sort_order)
-    @filtered_users.order(sort_order).limit(1000).pluck(:id)
+    @filtered_users.order(sort_order).limit(SiteSetting.users_show_limit).pluck(:id)
   end
 
   def filter_users_in_range(min, max)
@@ -74,7 +74,7 @@ class DirectoryView
   end
 
   def unfiltered_users
-    result = User.order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username").limit(1000)
+    result = User.order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username").limit(SiteSetting.users_show_limit)
     result
   end
 
@@ -82,7 +82,7 @@ class DirectoryView
     # TODO: Sort might be off
     @users = User.where(id: user_ids)
                  .order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username")
-                 .limit(1000)
+                 .limit(SiteSetting.users_show_limit)
     @users
   end
 
