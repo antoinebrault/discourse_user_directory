@@ -8,8 +8,6 @@ class DirectoryView
   def initialize(user=nil, options={})
     @guardian = Guardian.new(user)
 
-    @page = @page.to_i
-    @page = 1 if @page.zero?
     @limit ||= SiteSetting.users_per_page
 
     setup_filtered_users
@@ -23,23 +21,16 @@ class DirectoryView
   def filter_users(opts = {})
     return filter_users_by_ids(opts[:user_ids]) if opts[:user_ids].present?
 
-    filter_users_paged(opts[:page].to_i)
+    filter_users_for_first_page
   end
 
-  def filter_users_paged(page)
-    page = [page, 1].max
-    min = @limit * (page - 1)
-
-    # Sometimes we don't care about the OP, for example when embedding comments
-    min = 1 if min == 0 && @exclude_first
-
-    max = (min + @limit) - 1
-
-    filter_users_in_range(min, max)
+  def filter_users_for_first_page
+    user_count = (filtered_user_ids.length - 1)
+    @users = filter_users_by_ids(filtered_user_ids[0..[@limit, user_count].min])
   end
 
   def filtered_user_ids
-    @filtered_user_ids ||= filter_user_ids_by("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username")
+    @filtered_user_ids ||= filter_user_ids_by(order_by_active)
   end
 
   private
@@ -47,43 +38,20 @@ class DirectoryView
   def filter_users_by_ids(user_ids)
     # TODO: Sort might be off
     @users = User.where(id: user_ids)
-                 .order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username")
+                 .order(order_by_active)
                  .limit(SiteSetting.users_show_limit)
-    @users
   end
 
   def filter_user_ids_by(sort_order)
     @filtered_users.order(sort_order).limit(SiteSetting.users_show_limit).pluck(:id)
   end
 
-  def filter_users_in_range(min, max)
-    user_count = (filtered_user_ids.length - 1)
-
-    max = [max, user_count].min
-
-    return @users = [] if min > max
-
-    min = [[min, max].min, 0].max
-
-    @users = filter_users_by_ids(filtered_user_ids[min..max])
-    @users
-  end
-
   def setup_filtered_users
-    @filtered_users = unfiltered_users
+    @filtered_users = User.order(order_by_active).limit(SiteSetting.users_show_limit)
   end
 
-  def unfiltered_users
-    result = User.order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username").limit(SiteSetting.users_show_limit)
-    result
-  end
-
-  def filter_user_by_ids(user_ids)
-    # TODO: Sort might be off
-    @users = User.where(id: user_ids)
-                 .order("COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username")
-                 .limit(SiteSetting.users_show_limit)
-    @users
+  def order_by_active
+    "COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username"
   end
 
 end
