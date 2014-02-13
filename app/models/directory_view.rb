@@ -1,19 +1,14 @@
-require_dependency 'guardian'
-
 class DirectoryView
   include ActiveModel::Serialization
 
-  attr_reader :users, :filtered_users, :guardian, :filtered_ids
+  attr_reader :users, :filtered_users, :filtered_ids
 
-  def initialize(user=nil, options={})
-    @guardian = Guardian.new(user)
-
+  def initialize(options={})
     @limit ||= SiteSetting.users_per_page
 
-    setup_filtered_users
+    setup_filter
 
-    @initial_load = true
-    @index_reverse = false
+    filter_users_by_search_string(options[:filter]) unless options[:filter].blank?
 
     filter_users(options)
   end
@@ -30,23 +25,22 @@ class DirectoryView
   end
 
   def filtered_user_ids
-    @filtered_user_ids ||= filter_user_ids_by(order_by_active)
+    @filtered_user_ids ||= @filtered_users.pluck(:id)
   end
 
   private
 
+  def filter_users_by_search_string(filter = nil)
+    return if filter.blank?
+    @filtered_users = @filtered_users.where('username_lower like :filter or name like :filter', filter: "%#{filter}%")
+  end
+
   def filter_users_by_ids(user_ids)
     # TODO: Sort might be off
-    @users = User.where(id: user_ids)
-                 .order(order_by_active)
-                 .limit(SiteSetting.users_show_limit)
+    @users = @filtered_users.where(id: user_ids)
   end
 
-  def filter_user_ids_by(sort_order)
-    @filtered_users.order(sort_order).limit(SiteSetting.users_show_limit).pluck(:id)
-  end
-
-  def setup_filtered_users
+  def setup_filter
     @filtered_users = User.order(order_by_active).limit(SiteSetting.users_show_limit)
   end
 
