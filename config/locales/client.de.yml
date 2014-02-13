@@ -4,3 +4,9 @@ de:
       directory:
         title: "Benutzer"
         help: "Suche Benutzer"
+
+    directory:
+      users:
+        nav:
+          active: "Aktiv"
+          newest: "Neuste"

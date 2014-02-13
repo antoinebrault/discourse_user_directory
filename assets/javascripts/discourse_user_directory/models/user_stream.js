@@ -19,7 +19,7 @@
       url = Discourse.getURL("/directory");
 
       return PreloadStore.getAndRemove("user_directory", function() {
-        return Discourse.ajax(url + ".json", {data: { filter: filter }});
+        return Discourse.ajax(url + ".json", {data: { query: query, filter: filter }});
       });
     }
 
@@ -91,25 +91,13 @@
      @returns {Ember.Deferred} a promise that is resolved when the users have been inserted into the stream.
      **/
     refresh: function(query, filter) {
-
-      //opts = opts || {};
-      opts = {};
-      //opts.nearUser = parseInt(opts.nearUser, 10);
-
       var directory = this.get('directory');
       self = this;
-
-      // Do we already have the user in our list of users? Jump there.
-      //var userWeWant = this.get('users').findProperty('user_number', opts.nearUser);
-      //if (userWeWant) { return Ember.RSVP.resolve(); }
 
       // TODO: if we have all the users in the filter, don't go to the server for them.
       self.set('loadingFilter', true);
 
-      //opts = _.merge(opts, self.get('streamFilters'));
-
-      // Request a topicView
-      return Discourse.UserStream.loadDirectoryView(query, filter, opts).then(function (json) {
+      return Discourse.UserStream.loadDirectoryView(query, filter).then(function (json) {
         directory.updateFromJson(json);
         self.updateFromJson(json.user_stream);
         self.setProperties({ loadingFilter: false, loaded: true });

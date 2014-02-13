@@ -6,7 +6,7 @@ class DirectoryView
   def initialize(options={})
     @limit ||= SiteSetting.users_per_page
 
-    setup_filter
+    setup_filter(options[:query])
 
     filter_users_by_search_string(options[:filter]) unless options[:filter].blank?
 
@@ -39,12 +39,18 @@ class DirectoryView
     @users = @filtered_users.where(id: user_ids)
   end
 
-  def setup_filter
-    @filtered_users = User.order(order_by_active).limit(SiteSetting.users_show_limit)
+  def setup_filter(query)
+    public_users = User.real.not_blocked.not_suspended
+    return @filtered_users = public_users.order(order_by_newest).limit(SiteSetting.users_show_limit) if query == "newest"
+    @filtered_users = public_users.order(order_by_active).limit(SiteSetting.users_show_limit)
   end
 
   def order_by_active
     "COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')) DESC, username"
+  end
+
+  def order_by_newest
+    "created_at DESC, username"
   end
 
 end

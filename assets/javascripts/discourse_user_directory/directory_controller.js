@@ -5,13 +5,13 @@ window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discour
   userStream: null,
   filterMode: 'directory',
 
-  refresh: function(){
+  refresh: Discourse.debounce(function(){
     var directory = this.get('model'),
       userStream = directory.get('userStream');
 
-    userStream.refresh('active', this.get('searchString'));
+    userStream.refresh(this.get('query'), this.get('searchString'));
     this.set('userStream', userStream);
-  },
+  }, 250).observes('query'),
 
   filterUsers: Discourse.debounce(function() {
     return this.refresh();
