@@ -2,40 +2,45 @@
 
 
 
-  <div class='list-controls'>
-    <div class="container">
-      <section class="category-column first">
-      <ul class="nav nav-pills" id='category-filter'>
-		    <li>{{#link-to 'directory.active'}}{{i18n directory.users.nav.active}}{{/link-to}}</li>
-		    <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
-      </ul>
+<div class='list-controls'>
+  <div class="container">
+    <section class="category-column first">
+    <ul class="nav nav-pills" id='category-filter'>
+      <li>{{#link-to 'directory.active'}}{{i18n directory.users.nav.active}}{{/link-to}}</li>
+      <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
+    </ul>
 
-        {{view Discourse.TextField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}
-      </section>
+      {{view Discourse.TextField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}
+    </section>
 
-      {{#if userStream.loaded}}
+    {{#if userStream.loaded}}
 
-        {{#if userStream.users.length}}
-          <section class="category-column first">
-            {{#unless userStream.loadingFilter}}
-              {{cloaked-collection cloakView="directory_user" defaultHeight="200" content=userStream.users slackRatio=slackRatio loadingHTML=controller.loadingHTML}}
-            {{/unless}}
-          </section>
+      {{#if userStream.users.length}}
+        <section class="category-column first">
+          {{#unless userStream.loadingFilter}}
+            {{cloaked-collection cloakView="directory_user"
+                                 defaultHeight="200"
+                                 content=userStream.users
+                                 slackRatio=slackRatio
+                                 loadingHTML=controller.loadingHTML
+                                 preservesContext="true"}}
+          {{/unless}}
+        </section>
 
-          <div class='clearfix'></div>
+        <div class='clearfix'></div>
 
-          {{#if userStream.loadingBelow}}
-            <div class='spinner'>{{i18n loading}}</div>
-          {{/if}}
-
-          <div id='directory-bottom'></div>
-
-        {{else}}
-          <div>We couldn't find any users!</div>
+        {{#if userStream.loadingBelow}}
+          <div class='spinner'>{{i18n loading}}</div>
         {{/if}}
+
+        <div id='directory-bottom'></div>
+
+      {{else}}
+        <div>We couldn't find any users!</div>
       {{/if}}
-    </div>
+    {{/if}}
   </div>
+</div>
 
 {{#if userStream.loaded}}
 
