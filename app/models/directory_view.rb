@@ -1,7 +1,7 @@
 class DirectoryView
   include ActiveModel::Serialization
 
-  attr_reader :users, :filtered_users, :filtered_ids
+  attr_reader :users, :filtered_users, :filtered_ids, :seo_users
 
   def initialize(options={})
     @limit ||= SiteSetting.users_per_page
@@ -21,7 +21,8 @@ class DirectoryView
 
   def filter_users_for_first_page
     user_count = (filtered_user_ids.length - 1)
-    @users = filter_users_by_ids(filtered_user_ids[0..[@limit-1, user_count].min])
+    @seo_users = filter_users_by_ids(filtered_user_ids[0..[100-1, user_count].min])
+    @users = @seo_users[0..[@limit-1, user_count].min]
   end
 
   def filtered_user_ids
