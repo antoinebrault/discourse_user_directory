@@ -10,3 +10,5 @@ de:
         nav:
           active: "Aktiv"
           newest: "Neuste"
+        activity: "Letzte aktivität vor "
+        member_since: "Mitglied seit "

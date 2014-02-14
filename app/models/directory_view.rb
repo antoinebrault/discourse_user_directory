@@ -21,7 +21,7 @@ class DirectoryView
 
   def filter_users_for_first_page
     user_count = (filtered_user_ids.length - 1)
-    @users = filter_users_by_ids(filtered_user_ids[0..[@limit, user_count].min])
+    @users = filter_users_by_ids(filtered_user_ids[0..[@limit-1, user_count].min])
   end
 
   def filtered_user_ids
