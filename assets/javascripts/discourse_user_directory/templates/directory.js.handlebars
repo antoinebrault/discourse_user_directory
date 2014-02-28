@@ -1,14 +1,12 @@
 {{customHTML "top"}}
 
-
-
 <div class='list-controls'>
   <div class="container">
     <section class="category-column first">
-    <ul class="nav nav-pills" id='category-filter'>
-      <li>{{#link-to 'directory.active'}}{{i18n directory.users.nav.active}}{{/link-to}}</li>
-      <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
-    </ul>
+      <ul class="nav nav-pills" id='category-filter'>
+        <li>{{#link-to 'directory.active'}}{{i18n directory.users.nav.active}}{{/link-to}}</li>
+        <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
+      </ul>
 
       {{view Discourse.TextField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}
     </section>

@@ -1,5 +1,14 @@
 en:
-  filters:
+  js:
+    filters:
+      directory:
+        title: "Directory"
+        help: "Find Users"
+
     directory:
-      title: 'Directory'
-      help: 'Find Users'
+      users:
+        nav:
+          active: "Active"
+          newest: "Newest"
+        activity: "Last activity before "
+        member_since: "Member since "

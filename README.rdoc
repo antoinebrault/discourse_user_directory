@@ -19,5 +19,21 @@
          @top_menu_items ||= Discourse.filters + [:category, :categories, :top, :directory]
        end
 
+       def self.anonymous_top_menu_items
+         @anonymous_top_menu_items ||= Discourse.anonymous_filters + [:category, :categories, :top, :directory]
+       end
+
+3)
+   Add |directory to top_menu in the admin panel
+
+
+Problems:
+   When the translation is not displayed, remove the files in tmp/cache/assets/development/* and restart the rails server.
+   On production you have to precompile the assets, when the deploy precess dont do this.
+   RAILS_ENV=production bundle exec rake assets:precompile
+
+
+For update:
+   Make a git pull for update to the newst version
 
 This project rocks and uses MIT-LICENSE.

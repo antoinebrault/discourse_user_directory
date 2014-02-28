@@ -9,12 +9,3 @@ require File.expand_path('../lib/discourse_user_directory/engine', __FILE__)
 # register the two main assets (sprockets will take over from here)
 register_asset('javascripts/discourse_user_directory.js', :server_side)
 register_asset('stylesheets/discourse_user_directory.css')
-
-after_initialize do
-
-  # add plugin route
-  Discourse::Application.routes.prepend do
-    mount ::DiscourseUserDirectory::Engine, at: "/directory"
-  end
-
-end
