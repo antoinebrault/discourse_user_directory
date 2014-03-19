@@ -11,7 +11,6 @@ Discourse.DirectoryActiveRoute = Discourse.Route.extend({
   },
 
   setupController: function(controller, model) {
-
     this.controllerFor('directory').set('model', model);
     this.controllerFor('directory').set('query', 'active');
   }

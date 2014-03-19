@@ -1,6 +1,7 @@
-class DirectoryUserSerializer < UserSerializer
+class DirectoryUserSerializer < BasicUserSerializer
 
-  attributes :last_seen_age,
+  attributes :name,
+             :last_seen_age,
              :member_since
 
   def last_seen_age
@@ -12,4 +13,5 @@ class DirectoryUserSerializer < UserSerializer
     return nil if object.created_at.blank?
     AgeWords.age_words(Time.now - object.created_at)
   end
+
 end
