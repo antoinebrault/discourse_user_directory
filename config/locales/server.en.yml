@@ -1,0 +1,4 @@
+en:
+  site_settings:
+    users_per_page: "User shown on the directory page"
+    users_show_limit: "Maximum of users shown on the directory page"
