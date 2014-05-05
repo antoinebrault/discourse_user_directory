@@ -7,24 +7,7 @@
   $ cd plugins
   $ git clone git://github.com/www2014/discourse_user_directory.git
 
-2) Add 'Directory' as a top nav item
-
-   site_settings.yml:
-       top_menu:
-         client: true
-         default: 'latest|new|unread|starred|categories|directory'
-
-   lib/discourse.rb
-       def self.top_menu_items
-         @top_menu_items ||= Discourse.filters + [:category, :categories, :top, :directory]
-       end
-
-       def self.anonymous_top_menu_items
-         @anonymous_top_menu_items ||= Discourse.anonymous_filters + [:category, :categories, :top, :directory]
-       end
-
-3)
-   Add |directory to top_menu in the admin panel
+2) Add |directory to top_menu in the admin panel
 
 
 Problems:
