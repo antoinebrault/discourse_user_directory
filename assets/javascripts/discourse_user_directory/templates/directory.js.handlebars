@@ -1,4 +1,7 @@
-{{customHTML "top"}}
+<div class='container'>
+  {{custom-html "top"}}
+  {{Discourse.globalNotice}}
+</div>
 
 <div class='list-controls'>
   <div class="container">
@@ -8,7 +11,7 @@
         <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
       </ul>
 
-      {{view Discourse.TextField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}
+      {{textField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}
     </section>
 
     {{#if userStream.loaded}}
@@ -46,4 +49,4 @@
 	</div>
 {{/if}}
 
-{{customHTML "bottom"}}
+{{custom-html "bottom"}}
