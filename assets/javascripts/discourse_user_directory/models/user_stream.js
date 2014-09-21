@@ -174,6 +174,7 @@
         user.set('directory', this.get('directory'));
         userIdentityMap.set(user.get('id'), user);
       }
+      console.log(user, user.get("pretty_stats"));
       return user;
     },
 

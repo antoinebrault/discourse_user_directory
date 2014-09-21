@@ -1,7 +1,12 @@
-class DirectoryUserSerializer < BasicUserSerializer
+class DirectoryUserSerializer < UserSerializer
 
   attributes :name,
              :last_seen_age,
+             :created_at,
+             :trust_level,
+             :moderator,
+             :admin,
+             :stats,
              :member_since
 
   def last_seen_age

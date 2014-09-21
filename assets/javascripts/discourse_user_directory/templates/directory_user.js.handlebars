@@ -1,21 +1,18 @@
-<table id='topic-list' style='margin-bottom:12px;'>
-  <tr>
-    <th>
-      <a href="/users/{{unbound username}}">
-                {{avatar this imageSize="small"}}
-                {{unbound name}}
-      </a>
-    </th>
-  </tr>
-  <tr>
-    <td>
-      {{i18n directory.users.activity}} {{unbound last_seen_age}}
-      <br />
-      {{i18n directory.users.member_since}} {{unbound member_since}}
-    </td>
-  </tr>
-  <tr>
-    <td>
-    </td>
-  </tr>
-</table>
+<div class="user-item">
+  {{poster-avatar action="expandPostUser" post=this classNames="main-avatar"}}
+
+  <div class="username">
+    {{poster-name post=this expandAction="expandPostUser"}}
+    <span class="trustlevel">{{this.trustLevel.name}}</span>
+  </div>
+
+  <div class="likes">
+    {{this.likes_count}}
+  </div>
+  <div class="topics">
+    {{this.topics_count}}
+  </div>
+  <div class="posts">
+    {{this.posts_count}}
+  </div>
+</div>
