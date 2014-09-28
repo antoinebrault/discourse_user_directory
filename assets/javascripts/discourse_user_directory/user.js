@@ -19,20 +19,25 @@
       var stats = {};
       this.get("stats").forEach(function(x){
         stats[x.action_type] = x.count;
+        console.log(x.action_type);
       });
       return stats;
     }.property("stats"),
 
     likes_count: function(){
-      return this.get("pretty_stats")[Discourse.UserAction.TYPES.likes_received];
+      return this.get("pretty_stats")[Discourse.UserAction.TYPES.likes_received] || 0;
     }.property("pretty_stats"),
 
     topics_count: function(){
-      return this.get("pretty_stats")[Discourse.UserAction.TYPES.topics];
+      return this.get("pretty_stats")[Discourse.UserAction.TYPES.topics] || 0;
+    }.property("pretty_stats"),
+
+    replies_count: function(){
+      return this.get("pretty_stats")[Discourse.UserAction.TYPES.replies]|| 0;
     }.property("pretty_stats"),
 
     posts_count: function(){
-      return this.get("pretty_stats")[Discourse.UserAction.TYPES.posts];
+      return this.get("pretty_stats")[Discourse.UserAction.TYPES.posts]|| 0;
     }.property("pretty_stats"),
 
     updateFromUser: function(otherUser){
