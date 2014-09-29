@@ -7,8 +7,10 @@
   <div class="container">
     <section class="category-column first">
       <ul class="nav nav-pills" id='category-filter'>
+        <li>{{#link-to 'directory.latest'}}{{i18n directory.users.nav.latest}}{{/link-to}}</li>
         <li>{{#link-to 'directory.active'}}{{i18n directory.users.nav.active}}{{/link-to}}</li>
         <li>{{#link-to 'directory.newest'}}{{i18n directory.users.nav.newest}}{{/link-to}}</li>
+        <li>{{#link-to 'directory.moderator'}}{{i18n directory.users.nav.moderator}}{{/link-to}}</li>
       </ul>
 
       {{textField valueBinding="controller.searchString"  styleKey='width:300px;' placeholder="Search for a user..."}}

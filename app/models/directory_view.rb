@@ -41,9 +41,17 @@ class DirectoryView
   end
 
   def setup_filter(query)
-    public_users = User.real.not_blocked.not_suspended
-    return @filtered_users = public_users.order(order_by_newest).limit(SiteSetting.users_show_limit) if query == "newest"
-    @filtered_users = public_users.order(order_by_active).limit(SiteSetting.users_show_limit)
+    public_users = User.real.not_blocked.not_suspended.limit(SiteSetting.users_show_limit)
+    @filtered_users = case query
+      when "newest" then public_users.order(order_by_newest)
+      when "active" then public_users.order(order_by_active)
+      when "moderator" then public_users.where(moderator: true)
+      else public_users.order(latest)
+    end
+  end
+
+  def latest
+    "GREATEST(COALESCE(last_seen_at, to_date('1970-01-01', 'YYYY-MM-DD')), created_at) DESC, username"
   end
 
   def order_by_active

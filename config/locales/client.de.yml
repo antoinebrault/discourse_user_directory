@@ -8,7 +8,9 @@ de:
     directory:
       users:
         nav:
+          latest: "Aktuell"
           active: "Aktiv"
           newest: "Neuste"
+          moderator: "Moderatoren"
         activity: "Letzte aktivität vor "
         member_since: "Mitglied seit "
