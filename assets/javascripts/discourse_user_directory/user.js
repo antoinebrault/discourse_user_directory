@@ -19,7 +19,6 @@
       var stats = {};
       this.get("stats").forEach(function(x){
         stats[x.action_type] = x.count;
-        console.log(x.action_type);
       });
       return stats;
     }.property("stats"),
