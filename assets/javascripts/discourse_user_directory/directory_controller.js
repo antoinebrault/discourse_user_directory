@@ -5,6 +5,14 @@ window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discour
   userStream: null,
   filterMode: 'directory',
 
+
+  actions: {
+    // Modals that can pop up within a topic
+    expandPostUser: function(post) {
+      this.controllerFor('poster-expansion').show(post.get('username'), post.get('uploaded_avatar_id'));
+    }
+  },
+
   refresh: Discourse.debounce(function(){
     var directory = this.get('model'),
       userStream = directory.get('userStream');
