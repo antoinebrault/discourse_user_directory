@@ -1,6 +1,6 @@
 Discourse.DirectoryIndexRoute = Discourse.Route.extend({
   redirect: function() {
-    this.transitionTo('directory.newest');
+    this.transitionTo('directory.active');
   }
 });
 
