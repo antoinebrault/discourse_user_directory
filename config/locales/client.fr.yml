@@ -1,0 +1,16 @@
+fr:
+  js:
+    filters:
+      directory:
+        title: "Utilisateurs"
+        help: "Chercher  Users"
+
+    directory:
+      users:
+        nav:
+          latest: "Derniers"
+          active: "Actifs"
+          newest: "Nouveaux"
+          moderator: "Modérateurs"
+        activity: "Dernière activité "
+        member_since: "Membre depuis "
