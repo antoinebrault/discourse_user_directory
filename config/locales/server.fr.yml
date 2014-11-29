@@ -1,0 +1,4 @@
+fr:
+  site_settings:
+    users_per_page: "Utilisateurs affichés sur la page de répertoire"
+    users_show_limit: "Nombre maximum d'utilisateurs affichés sur la page de répertoire"
