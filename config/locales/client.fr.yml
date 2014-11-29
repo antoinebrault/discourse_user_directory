@@ -2,8 +2,8 @@ fr:
   js:
     filters:
       directory:
-        title: "Utilisateurs"
-        help: "Chercher des utilisateurs"
+        title: "Membres"
+        help: "Chercher des membres"
 
     directory:
       users:
