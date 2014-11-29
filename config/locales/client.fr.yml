@@ -3,7 +3,7 @@ fr:
     filters:
       directory:
         title: "Utilisateurs"
-        help: "Chercher  Users"
+        help: "Chercher des utilisateurs"
 
     directory:
       users:
