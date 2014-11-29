@@ -41,6 +41,6 @@ window.Discourse.DirectoryController = Discourse.ObjectController.extend(Discour
   },
 
   loadingHTML: function() {
-    return "<div class='spinner'>" + I18n.t('loading') + "</div>";
+    return "<div class='spinner'></div>";
   }.property()
 });
